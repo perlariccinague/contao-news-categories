@@ -1,0 +1,14 @@
+{% extends "@Contao/frontend_module/_base.html.twig" %}
+
+{% block content %}
+<ul class="news-category-filter">
+    <li class="{% if not active_category %}active{% endif %}">
+        <a href="{{ all_url }}">{{ 'news_category_filter.all'|trans({}, 'KlapprothKochContaoEventNewsCategories') }}</a>
+    </li>
+    {% for category in categories %}
+        <li class="{{ category.cssClass }}{% if category.active %} active{% endif %}">
+            <a href="{{ category.url }}">{{ category.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

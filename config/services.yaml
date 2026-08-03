@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    KlapprothKoch\ContaoNewsCategories\:
+        resource: '../src/'
+        exclude:
+            - '../src/ContaoManager/'
+            - '../src/DependencyInjection/'
+            - '../src/ContaoNewsCategoriesBundle.php'
+
+    KlapprothKoch\ContaoNewsCategories\Controller\FrontendModule\NewsCategoryFilterController:
+        tags: ['controller.service_arguments']

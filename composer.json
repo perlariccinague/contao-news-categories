@@ -1,0 +1,19 @@
+{
+    "name": "klapproth-koch/contao-news-categories",
+    "description": "Adds categories to Contao 5 news and events",
+    "type": "contao-bundle",
+    "license": "LGPL-3.0-or-later",
+    "require": {
+        "php": "^8.1",
+        "contao/core-bundle": "^5.7",
+        "contao/news-bundle": "^5.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "KlapprothKoch\\ContaoNewsCategories\\": "src/"
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "KlapprothKoch\\ContaoNewsCategories\\ContaoManager\\Plugin"
+    }
+}
