@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace KlapprothKoch\ContaoEventNewsCategories\DependencyInjection;
+namespace Emchundberger\ContaoNewsCategories\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class ContaoEventNewsCategoriesExtension extends Extension
+class ContaoNewsCategoriesExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container): void
     {

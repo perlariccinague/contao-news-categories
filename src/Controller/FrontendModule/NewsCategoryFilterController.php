@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace KlapprothKoch\ContaoEventNewsCategories\Controller\FrontendModule;
+namespace Emchundberger\ContaoNewsCategories\Controller\FrontendModule;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;

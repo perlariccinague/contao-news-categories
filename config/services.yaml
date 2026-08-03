@@ -3,12 +3,12 @@ services:
         autowire: true
         autoconfigure: true
 
-    KlapprothKoch\ContaoNewsCategories\:
-        resource: '../src/'
+    Emchundberger\ContaoNewsCategories\:
+        resource: '../src/*'
         exclude:
             - '../src/ContaoManager/'
             - '../src/DependencyInjection/'
             - '../src/ContaoNewsCategoriesBundle.php'
 
-    KlapprothKoch\ContaoNewsCategories\Controller\FrontendModule\NewsCategoryFilterController:
+    Emchundberger\ContaoNewsCategories\Controller\FrontendModule\NewsCategoryFilterController:
         tags: ['controller.service_arguments']

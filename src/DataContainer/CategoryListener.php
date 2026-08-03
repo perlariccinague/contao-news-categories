@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace KlapprothKoch\ContaoEventNewsCategories\DataContainer;
+namespace Emchundberger\ContaoNewsCategories\DataContainer;
 
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
@@ -28,34 +28,16 @@ class CategoryListener
         return $this->generateCssClass($value, (string) ($dc->activeRecord?->name ?? ''));
     }
 
-    #[AsCallback(table: 'tl_event_category', target: 'fields.cssClass.save')]
-    public function generateEventCssClass(string $value, DataContainer $dc): string
-    {
-        return $this->generateCssClass($value, (string) ($dc->activeRecord?->name ?? ''));
-    }
-
     #[AsCallback(table: 'tl_news_archive', target: 'fields.allowedNewsCategories.options')]
     public function getAllNewsCategories(): array
     {
         return $this->fetchCategoryOptions('tl_news_category');
     }
 
-    #[AsCallback(table: 'tl_calendar', target: 'fields.allowedEventCategories.options')]
-    public function getAllEventCategories(): array
-    {
-        return $this->fetchCategoryOptions('tl_event_category');
-    }
-
     #[AsCallback(table: 'tl_news', target: 'fields.newsCategories.options')]
     public function getNewsCategories(DataContainer $dc): array
     {
         return $this->fetchFilteredCategoryOptions('tl_news_category', 'tl_news_archive', 'allowedNewsCategories', $dc);
-    }
-
-    #[AsCallback(table: 'tl_calendar_events', target: 'fields.eventCategories.options')]
-    public function getEventCategories(DataContainer $dc): array
-    {
-        return $this->fetchFilteredCategoryOptions('tl_event_category', 'tl_calendar', 'allowedEventCategories', $dc);
     }
 
     private function generateCssClass(string $value, string $name): string

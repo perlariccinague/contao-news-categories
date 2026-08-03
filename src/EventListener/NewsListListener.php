@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace KlapprothKoch\ContaoEventNewsCategories\EventListener;
+namespace Emchundberger\ContaoNewsCategories\EventListener;
 
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Model\Collection;
