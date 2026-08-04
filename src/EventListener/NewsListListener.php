@@ -112,7 +112,7 @@ class NewsListListener
     #[AsHook('parseArticles')]
     public function addCategoriesToTemplate(Template $template, array $row, Module $module): void
     {
-        // Kategorien
+        // News categories
         $ids = StringUtil::deserialize($row['newsCategories'] ?? '', true);
 
         if (!empty($ids)) {
@@ -129,13 +129,21 @@ class NewsListListener
 
 
         // Standort
-        if (!empty($row['standort'])) {
-            $template->standort = $this->connection->fetchOne(
+        $standortId = $row['standort'] ?? null;
+
+        if ($standortId) {
+
+            $standort = $this->connection->fetchAssociative(
                 'SELECT name FROM tl_standort WHERE id = ?',
-                [(int) $row['standort']]
+                [$standortId]
             );
+
+            $template->standort = $standort['name'] ?? '';
+
         } else {
+
             $template->standort = '';
+
         }
     }
 
