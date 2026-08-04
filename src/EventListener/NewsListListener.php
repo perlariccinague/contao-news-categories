@@ -26,6 +26,7 @@ class NewsListListener
     #[AsHook('newsListCountItems')]
     public function countItems(array $newsArchives, ?bool $featured, object $module): int|false
     {
+        error_log("=== NewsListListener::countItems START ===");
         $request = $this->requestStack->getCurrentRequest();
 
         if (null === $request) {
