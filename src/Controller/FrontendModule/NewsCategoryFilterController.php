@@ -22,12 +22,20 @@ class NewsCategoryFilterController extends AbstractFrontendModuleController
 
     protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
     {
+        /*
+         * NEWS CATEGORIES
+         */
+
         $allowedIds = StringUtil::deserialize($model->allowedNewsCategories, true);
 
         if (!empty($allowedIds)) {
             $placeholders = implode(',', array_fill(0, count($allowedIds), '?'));
+
             $rows = $this->connection->fetchAllAssociative(
-                "SELECT id, name, cssClass FROM tl_news_category WHERE id IN ($placeholders) ORDER BY name",
+                "SELECT id, name, cssClass 
+                 FROM tl_news_category 
+                 WHERE id IN ($placeholders) 
+                 ORDER BY name",
                 array_values($allowedIds)
             );
         } else {
@@ -36,15 +44,22 @@ class NewsCategoryFilterController extends AbstractFrontendModuleController
             );
         }
 
+
         $activeClass = $request->query->get('category', '');
+
         $basePath = $request->getBaseUrl() . $request->getPathInfo();
         $currentParams = $request->query->all();
 
+
         $categories = [];
+
         foreach ($rows as $row) {
+
             $params = $currentParams;
             unset($params['page']);
+
             $params['category'] = $row['cssClass'];
+
             $categories[] = [
                 'id' => $row['id'],
                 'name' => $row['name'],
@@ -54,13 +69,55 @@ class NewsCategoryFilterController extends AbstractFrontendModuleController
             ];
         }
 
+        $standortRows = $this->connection->fetchAllAssociative(
+            'SELECT id, name FROM tl_standort ORDER BY name'
+        );
+
+
+        $activeStandort = $request->query->get('standort', '');
+
+        $standorte = [];
+
+
+        foreach ($standortRows as $row) {
+
+            $params = $currentParams;
+            unset($params['page']);
+
+            $params['standort'] = $row['id'];
+
+
+            $standorte[] = [
+                'id' => $row['id'],
+                'name' => $row['name'],
+                'url' => $basePath . '?' . http_build_query($params),
+                'active' => (string) $row['id'] === (string) $activeStandort,
+            ];
+        }
+
         $allParams = $currentParams;
-        unset($allParams['category'], $allParams['page']);
-        $allUrl = $basePath . (!empty($allParams) ? '?' . http_build_query($allParams) : '');
+
+        unset(
+            $allParams['category'],
+            $allParams['standort'],
+            $allParams['page']
+        );
+
+
+        $allUrl = $basePath . (!empty($allParams)
+                ? '?' . http_build_query($allParams)
+                : ''
+            );
+
 
         $template->categories = $categories;
         $template->activeCategory = $activeClass;
+
+        $template->standorte = $standorte;
+        $template->activeStandort = $activeStandort;
+
         $template->allUrl = $allUrl;
+
 
         return $template->getResponse();
     }
