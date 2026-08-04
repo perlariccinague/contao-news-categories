@@ -32,10 +32,8 @@ class NewsListListener
             return false;
         }
 
-
         $categoryClass = $request->query->get('category', '');
         $standortId = $request->query->get('standort', '');
-
 
         $qb = $this->connection->createQueryBuilder()
             ->select('COUNT(*)')
@@ -47,8 +45,6 @@ class NewsListListener
             ->setParameter('archives', $newsArchives, ArrayParameterType::INTEGER)
             ->setParameter('time', time());
 
-
-        // Filtre catégorie
         if ($categoryClass !== '') {
 
             $category = $this->findCategoryByClass('tl_news_category', $categoryClass);
@@ -64,8 +60,6 @@ class NewsListListener
             }
         }
 
-
-        // Filtre Standort
         if ($standortId !== '') {
 
             $qb->andWhere('standort = :standort')
@@ -99,11 +93,8 @@ class NewsListListener
             return false;
         }
 
-
         $categoryClass = $request->query->get('category', '');
         $standortId = $request->query->get('standort', '');
-
-
 
         $qb = $this->connection->createQueryBuilder()
             ->select('id')
@@ -119,8 +110,6 @@ class NewsListListener
             ->setParameter('time', time());
 
 
-
-        // Filtre catégorie
         if ($categoryClass !== '') {
 
             $category = $this->findCategoryByClass('tl_news_category', $categoryClass);
@@ -136,9 +125,6 @@ class NewsListListener
             }
         }
 
-
-
-        // Filtre Standort
         if ($standortId !== '') {
 
             $qb->andWhere('standort = :standort')
@@ -159,17 +145,6 @@ class NewsListListener
         }
 
         $ids = $qb->fetchFirstColumn();
-
-        file_put_contents(
-            dirname(__DIR__, 5).'/var/log/news-filter.log',
-            print_r([
-                'sql' => $qb->getSQL(),
-                'params' => $qb->getParameters(),
-                'ids' => $ids,
-            ], true),
-            FILE_APPEND
-        );
-
 
         if (empty($ids)) {
             return [];
