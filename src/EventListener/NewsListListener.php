@@ -170,6 +170,7 @@ class NewsListListener
             FILE_APPEND
         );
 
+
         if (empty($ids)) {
             return [];
         }
