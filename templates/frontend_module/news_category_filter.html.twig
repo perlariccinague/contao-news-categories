@@ -1,14 +1,72 @@
 {% extends "@Contao/frontend_module/_base.html.twig" %}
 
 {% block content %}
-    <ul class="news-category-filter">
-        <li class="{% if not active_category %}active{% endif %}">
-            <a href="{{ all_url }}">{{ 'news_category_filter.all'|trans({}, 'EmchundbergerContaoNewsCategories') }}</a>
-        </li>
-        {% for category in categories %}
-            <li class="{{ category.cssClass }}{% if category.active %} active{% endif %}">
-                <a href="{{ category.url }}">{{ category.name }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+
+    <div class="news-filter">
+
+
+        <div class="news-filter-row">
+
+        <span class="filter-title">
+            Newsbereich
+        </span>
+
+            <ul class="news-category-filter">
+
+                <li class="{% if not activeCategory %}active{% endif %}">
+                    <a href="{{ allUrl }}">
+                        {{ 'news_category_filter.all'|trans({}, 'EmchundbergerContaoNewsCategories') }}
+                    </a>
+                </li>
+
+
+                {% for category in categories %}
+
+                    <li class="{{ category.cssClass }}{% if category.active %} active{% endif %}">
+                        <a href="{{ category.url }}">
+                            {{ category.name }}
+                        </a>
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+
+
+        <div class="news-filter-row">
+
+        <span class="filter-title">
+            Standort
+        </span>
+
+
+            <ul class="news-standort-filter">
+
+                <li class="{% if not activeStandort %}active{% endif %}">
+                    <a href="{{ allUrl }}">
+                        Alle
+                    </a>
+                </li>
+
+
+                {% for standort in standorte %}
+
+                    <li class="{% if standort.active %}active{% endif %}">
+                        <a href="{{ standort.url }}">
+                            {{ standort.name }}
+                        </a>
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+
+    </div>
+
 {% endblock %}
