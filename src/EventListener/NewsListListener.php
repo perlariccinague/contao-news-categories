@@ -35,6 +35,10 @@ class NewsListListener
         $categoryClass = $request->query->get('category', '');
         $standortId = $request->query->get('standort', '');
 
+        error_log("=== FILTER DEBUG ===");
+        error_log("categoryClass: " . $categoryClass);
+        error_log("standortId: " . $standortId);
+
         $qb = $this->connection->createQueryBuilder()
             ->select('COUNT(*)')
             ->from('tl_news')
