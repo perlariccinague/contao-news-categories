@@ -22,23 +22,20 @@ class NewsListListener
     ) {
     }
 
+
     #[AsHook('newsListCountItems')]
     public function countItems(array $newsArchives, ?bool $featured, object $module): int|false
     {
         $request = $this->requestStack->getCurrentRequest();
+
         if (null === $request) {
             return false;
         }
 
-        $categoryClass = $request->query->get('category', '');
-        if ('' === $categoryClass) {
-            return false;
-        }
 
-        $category = $this->findCategoryByClass('tl_news_category', $categoryClass);
-        if (null === $category) {
-            return 0;
-        }
+        $categoryClass = $request->query->get('category', '');
+        $standortId = $request->query->get('standort', '');
+
 
         $qb = $this->connection->createQueryBuilder()
             ->select('COUNT(*)')
@@ -47,37 +44,66 @@ class NewsListListener
             ->andWhere("published = '1'")
             ->andWhere("(start = '' OR start <= :time)")
             ->andWhere("(stop = '' OR stop > :time)")
-            ->andWhere('newsCategories REGEXP :pattern')
             ->setParameter('archives', $newsArchives, ArrayParameterType::INTEGER)
-            ->setParameter('time', time())
-            ->setParameter('pattern', $this->buildSerializedPattern($category['id']));
+            ->setParameter('time', time());
+
+
+        // Filtre catégorie
+        if ($categoryClass !== '') {
+
+            $category = $this->findCategoryByClass('tl_news_category', $categoryClass);
+
+            if (null !== $category) {
+
+                $qb->andWhere('newsCategories REGEXP :pattern')
+                    ->setParameter(
+                        'pattern',
+                        $this->buildSerializedPattern($category['id'])
+                    );
+
+            }
+        }
+
+
+        // Filtre Standort
+        if ($standortId !== '') {
+
+            $qb->andWhere('standort = :standort')
+                ->setParameter('standort', (int) $standortId);
+
+        }
+
 
         if (true === $featured) {
+
             $qb->andWhere("featured = '1'");
+
         } elseif (false === $featured) {
+
             $qb->andWhere("featured != '1'");
+
         }
+
 
         return (int) $qb->fetchOne();
     }
+
+
 
     #[AsHook('newsListFetchItems')]
     public function fetchItems(array $newsArchives, ?bool $featured, int $limit, int $offset, object $module): Collection|array|false
     {
         $request = $this->requestStack->getCurrentRequest();
+
         if (null === $request) {
             return false;
         }
 
-        $categoryClass = $request->query->get('category', '');
-        if ('' === $categoryClass) {
-            return false;
-        }
 
-        $category = $this->findCategoryByClass('tl_news_category', $categoryClass);
-        if (null === $category) {
-            return [];
-        }
+        $categoryClass = $request->query->get('category', '');
+        $standortId = $request->query->get('standort', '');
+
+
 
         $qb = $this->connection->createQueryBuilder()
             ->select('id')
@@ -86,50 +112,97 @@ class NewsListListener
             ->andWhere("published = '1'")
             ->andWhere("(start = '' OR start <= :time)")
             ->andWhere("(stop = '' OR stop > :time)")
-            ->andWhere('newsCategories REGEXP :pattern')
             ->orderBy('date', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->setParameter('archives', $newsArchives, ArrayParameterType::INTEGER)
-            ->setParameter('time', time())
-            ->setParameter('pattern', $this->buildSerializedPattern($category['id']));
+            ->setParameter('time', time());
 
-        if (true === $featured) {
-            $qb->andWhere("featured = '1'");
-        } elseif (false === $featured) {
-            $qb->andWhere("featured != '1'");
+
+
+        // Filtre catégorie
+        if ($categoryClass !== '') {
+
+            $category = $this->findCategoryByClass('tl_news_category', $categoryClass);
+
+            if (null !== $category) {
+
+                $qb->andWhere('newsCategories REGEXP :pattern')
+                    ->setParameter(
+                        'pattern',
+                        $this->buildSerializedPattern($category['id'])
+                    );
+
+            }
         }
 
+
+
+        // Filtre Standort
+        if ($standortId !== '') {
+
+            $qb->andWhere('standort = :standort')
+                ->setParameter('standort', (int) $standortId);
+
+        }
+
+
+
+        if (true === $featured) {
+
+            $qb->andWhere("featured = '1'");
+
+        } elseif (false === $featured) {
+
+            $qb->andWhere("featured != '1'");
+
+        }
+
+
+
         $ids = $qb->fetchFirstColumn();
+
 
         if (empty($ids)) {
             return [];
         }
 
+
         return NewsModel::findMultipleByIds($ids, ['order' => 'date DESC']);
     }
+
+
 
     #[AsHook('parseArticles')]
     public function addCategoriesToTemplate(Template $template, array $row, Module $module): void
     {
-        // News categories
+
+        // News Kategorien
         $ids = StringUtil::deserialize($row['newsCategories'] ?? '', true);
 
+
         if (!empty($ids)) {
+
             $rows = $this->connection->fetchAllAssociative(
                 'SELECT name, cssClass FROM tl_news_category WHERE id IN (?)',
                 [$ids],
                 [ArrayParameterType::INTEGER]
             );
 
+
             $template->newsCategories = $rows;
+
         } else {
+
             $template->newsCategories = [];
+
         }
+
 
 
         // Standort
         $standortId = $row['standort'] ?? null;
+
 
         if ($standortId) {
 
@@ -138,6 +211,7 @@ class NewsListListener
                 [$standortId]
             );
 
+
             $template->standort = $standort['name'] ?? '';
 
         } else {
@@ -145,7 +219,10 @@ class NewsListListener
             $template->standort = '';
 
         }
+
     }
+
+
 
     private function findCategoryByClass(string $table, string $cssClass): ?array
     {
@@ -154,13 +231,12 @@ class NewsListListener
             [$cssClass]
         );
 
+
         return $row ?: null;
     }
 
-    /**
-     * Builds a REGEXP pattern that safely matches a category ID inside a PHP-serialized array.
-     * Example for ID 5: s:[0-9]+:"5"; — matches s:1:"5"; but not s:2:"51";
-     */
+
+
     private function buildSerializedPattern(int|string $id): string
     {
         return 's:[0-9]+:"' . (int) $id . '";';
