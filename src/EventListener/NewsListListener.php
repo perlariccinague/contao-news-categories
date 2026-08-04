@@ -159,12 +159,15 @@ class NewsListListener
         }
 
         $ids = $qb->fetchFirstColumn();
-
-        dump($qb->getSQL());
-        dump($qb->getParameters());
-        dump($ids);
-        exit;
-
+        file_put_contents(
+            \System::getContainer()->getParameter('kernel.logs_dir').'/news-filter.log',
+            print_r([
+                'sql' => $qb->getSQL(),
+                'params' => $qb->getParameters(),
+                'ids' => $ids,
+            ], true),
+            FILE_APPEND
+        );
 
         if (empty($ids)) {
             return [];
