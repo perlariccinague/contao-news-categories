@@ -4,68 +4,80 @@
 
     <div class="news-filter">
 
+        <div class-filter-row">
 
-        <div class="news-filter-row">
+        <span class="filter-title">Standort</span>
 
-        <span class="filter-title">
-            Newsbereich
-        </span>
+        <ul class="news-standort-filter">
 
-            <ul class="news-category-filter">
+            <li class="{% if not activeStandort %}active{% endif %}">
+                <a href="{{ allUrl }}">
+                    Alle
+                </a>
+            </li>
 
-                <li class="{% if not activeCategory %}active{% endif %}">
-                    <a href="{{ allUrl }}">
-                        {{ 'news_category_filter.all'|trans({}, 'EmchundbergerContaoNewsCategories') }}
+            {% for standort in standorte %}
+
+                <li class="{% if standort.active %}active{% endif %}">
+                    <a href="{{ standort.url }}">
+                        {{ standort.name }}
                     </a>
                 </li>
 
+            {% endfor %}
 
-                {% for category in categories %}
+        </ul>
 
-                    <li class="{{ category.cssClass }}{% if category.active %} active{% endif %}">
-                        <a href="{{ category.url }}">
-                            {{ category.name }}
-                        </a>
-                    </li>
+    </div>
 
-                {% endfor %}
+    <div class="news-filter-row">
 
-            </ul>
+        <span class="filter-title">Newsbereich</span>
 
-        </div>
+        <ul class="news-category-filter">
 
+            <li class="{% if not activeCategory %}active{% endif %}">
+                <a href="{{ allUrl }}">
+                    Alle
+                </a>
+            </li>
 
+            {% for category in categories %}
 
-        <div class="news-filter-row">
-
-        <span class="filter-title">
-            Standort
-        </span>
-
-
-            <ul class="news-standort-filter">
-
-                <li class="{% if not activeStandort %}active{% endif %}">
-                    <a href="{{ allUrl }}">
-                        Alle
+                <li class="{{ category.cssClass }}{% if category.active %} active{% endif %}">
+                    <a href="{{ category.url }}">
+                        {{ category.name }}
                     </a>
                 </li>
 
+            {% endfor %}
 
-                {% for standort in standorte %}
 
-                    <li class="{% if standort.active %}active{% endif %}">
-                        <a href="{{ standort.url }}">
-                            {{ standort.name }}
-                        </a>
-                    </li>
+        </ul>
 
-                {% endfor %}
+    </div>
 
-            </ul>
+    <div class="news-search">
 
-        </div>
+        <form method="get">
 
+            <input type="text" name="search" value="{{ search }}" placeholder="Suche">
+
+            {% if activeCategory %}
+                <input type="hidden" name="category" value="{{ activeCategory }}">
+            {% endif %}
+
+            {% if activeStandort %}
+                <input type="hidden" name="standort" value="{{ activeStandort }}">
+            {% endif %}
+
+            <button type="submit">
+                Suchen
+            </button>
+
+        </form>
+
+    </div>
 
     </div>
 
