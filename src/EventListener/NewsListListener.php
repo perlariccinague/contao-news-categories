@@ -158,7 +158,10 @@ class NewsListListener
 
         }
 
-
+        dump($qb->getSQL());
+        dump($qb->getParameters());
+        dump($ids);
+        exit;
 
         $ids = $qb->fetchFirstColumn();
 
@@ -199,8 +202,6 @@ class NewsListListener
         }
 
 
-
-        // Standort
         $standortId = $row['standort'] ?? null;
 
 
