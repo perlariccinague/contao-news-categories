@@ -158,12 +158,12 @@ class NewsListListener
 
         }
 
+        $ids = $qb->fetchFirstColumn();
+
         dump($qb->getSQL());
         dump($qb->getParameters());
         dump($ids);
         exit;
-
-        $ids = $qb->fetchFirstColumn();
 
 
         if (empty($ids)) {
