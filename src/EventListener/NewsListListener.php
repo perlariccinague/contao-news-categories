@@ -112,20 +112,31 @@ class NewsListListener
     #[AsHook('parseArticles')]
     public function addCategoriesToTemplate(Template $template, array $row, Module $module): void
     {
+        // Kategorien
         $ids = StringUtil::deserialize($row['newsCategories'] ?? '', true);
 
-        if (empty($ids)) {
+        if (!empty($ids)) {
+            $rows = $this->connection->fetchAllAssociative(
+                'SELECT name, cssClass FROM tl_news_category WHERE id IN (?)',
+                [$ids],
+                [ArrayParameterType::INTEGER]
+            );
+
+            $template->newsCategories = $rows;
+        } else {
             $template->newsCategories = [];
-            return;
         }
 
-        $rows = $this->connection->fetchAllAssociative(
-            'SELECT name, cssClass FROM tl_news_category WHERE id IN (?)',
-            [$ids],
-            [ArrayParameterType::INTEGER]
-        );
 
-        $template->newsCategories = $rows;
+        // Standort
+        if (!empty($row['standort'])) {
+            $template->standort = $this->connection->fetchOne(
+                'SELECT name FROM tl_standort WHERE id = ?',
+                [(int) $row['standort']]
+            );
+        } else {
+            $template->standort = '';
+        }
     }
 
     private function findCategoryByClass(string $table, string $cssClass): ?array
