@@ -118,11 +118,13 @@ class NewsListListener
             ->andWhere("(stop = '' OR stop > :time)")
             ->orderBy('date', 'DESC')
             ->setFirstResult($offset)
-            ->setMaxResults($limit)
+
             ->setParameter('archives', $newsArchives, ArrayParameterType::INTEGER)
             ->setParameter('time', time());
 
-
+        if ($limit > 0) {
+            $qb->setMaxResults($limit);
+        }
         if ($categoryClass !== '') {
 
             $category = $this->findCategoryByClass('tl_news_category', $categoryClass);
