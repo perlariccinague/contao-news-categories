@@ -26,7 +26,6 @@ class NewsListListener
     #[AsHook('newsListCountItems')]
     public function countItems(array $newsArchives, ?bool $featured, object $module): int|false
     {
-        error_log("=== NewsListListener::countItems START ===");
         $request = $this->requestStack->getCurrentRequest();
 
         if (null === $request) {
@@ -35,10 +34,7 @@ class NewsListListener
 
         $categoryClass = $request->query->get('category', '');
         $standortId = $request->query->get('standort', '');
-
-        error_log("=== FILTER DEBUG ===");
-        error_log("categoryClass: " . $categoryClass);
-        error_log("standortId: " . $standortId);
+        $search = $request->query->get('search', '');
 
         $qb = $this->connection->createQueryBuilder()
             ->select('COUNT(*)')
@@ -72,6 +68,18 @@ class NewsListListener
 
         }
 
+        if ($search !== '') {
+
+            $qb->andWhere(
+                '(headline LIKE :search OR teaser LIKE :search OR description LIKE :search)'
+            )
+                ->setParameter(
+                    'search',
+                    '%' . $search . '%'
+                );
+
+        }
+
 
         if (true === $featured) {
 
@@ -83,12 +91,6 @@ class NewsListListener
 
         }
 
-        // DEBUG
-        error_log('=== COUNT SQL ===');
-        error_log($qb->getSQL());
-        error_log(print_r($qb->getParameters(), true));
-
-
         return (int) $qb->fetchOne();
     }
 
@@ -97,8 +99,6 @@ class NewsListListener
     #[AsHook('newsListFetchItems')]
     public function fetchItems(array $newsArchives, ?bool $featured, int $limit, int $offset, object $module): Collection|array|false
     {
-        error_log('LIMIT = ' . $limit);
-        error_log('OFFSET = ' . $offset);
         $request = $this->requestStack->getCurrentRequest();
 
         if (null === $request) {
@@ -107,7 +107,8 @@ class NewsListListener
 
         $categoryClass = $request->query->get('category', '');
         $standortId = $request->query->get('standort', '');
-        error_log('standortId = [' . $standortId . ']');
+        $search = $request->query->get('search', '');
+        error_log('SEARCH = ' . $search);
 
         $qb = $this->connection->createQueryBuilder()
             ->select('id')
@@ -147,6 +148,18 @@ class NewsListListener
 
         }
 
+        if ($search !== '') {
+
+            $qb->andWhere(
+                '(headline LIKE :search OR teaser LIKE :search OR description LIKE :search)'
+            )
+                ->setParameter(
+                    'search',
+                    '%' . $search . '%'
+                );
+
+        }
+
 
 
         if (true === $featured) {
@@ -158,12 +171,8 @@ class NewsListListener
             $qb->andWhere("featured != '1'");
 
         }
-        error_log('=== FETCH SQL ===');
-        error_log($qb->getSQL());
-        error_log(print_r($qb->getParameters(), true));
 
         $ids = $qb->fetchFirstColumn();
-        error_log('IDS: ' . print_r($ids, true));
 
         if (empty($ids)) {
             return [];
