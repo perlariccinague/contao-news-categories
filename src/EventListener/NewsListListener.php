@@ -159,6 +159,7 @@ class NewsListListener
         error_log(print_r($qb->getParameters(), true));
 
         $ids = $qb->fetchFirstColumn();
+        error_log('IDS: ' . print_r($ids, true));
 
         if (empty($ids)) {
             return [];
