@@ -83,6 +83,11 @@ class NewsListListener
 
         }
 
+        // DEBUG
+        error_log('=== COUNT SQL ===');
+        error_log($qb->getSQL());
+        error_log(print_r($qb->getParameters(), true));
+
 
         return (int) $qb->fetchOne();
     }
@@ -100,6 +105,7 @@ class NewsListListener
 
         $categoryClass = $request->query->get('category', '');
         $standortId = $request->query->get('standort', '');
+        error_log('standortId = [' . $standortId . ']');
 
         $qb = $this->connection->createQueryBuilder()
             ->select('id')
@@ -148,6 +154,9 @@ class NewsListListener
             $qb->andWhere("featured != '1'");
 
         }
+        error_log('=== FETCH SQL ===');
+        error_log($qb->getSQL());
+        error_log(print_r($qb->getParameters(), true));
 
         $ids = $qb->fetchFirstColumn();
 
