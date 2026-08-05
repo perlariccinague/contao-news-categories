@@ -97,6 +97,8 @@ class NewsListListener
     #[AsHook('newsListFetchItems')]
     public function fetchItems(array $newsArchives, ?bool $featured, int $limit, int $offset, object $module): Collection|array|false
     {
+        error_log('LIMIT = ' . $limit);
+        error_log('OFFSET = ' . $offset);
         $request = $this->requestStack->getCurrentRequest();
 
         if (null === $request) {
