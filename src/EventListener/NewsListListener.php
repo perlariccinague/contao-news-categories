@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Emchundberger\ContaoNewsCategories\EventListener;
+namespace Wbb\ContaoProjectCategories\EventListener;
 
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Model\Collection;
@@ -22,7 +22,6 @@ class NewsListListener
     ) {
     }
 
-
     #[AsHook('newsListCountItems')]
     public function countItems(array $newsArchives, ?bool $featured, object $module): int|false
     {
@@ -32,8 +31,11 @@ class NewsListListener
             return false;
         }
 
+        if ('1' !== (string) ($module->enableProjectCategories ?? '')) {
+            return false;
+        }
+
         $categoryClass = $request->query->get('category', '');
-        $standortId = $request->query->get('standort', '');
         $search = $request->query->get('search', '');
 
         $qb = $this->connection->createQueryBuilder()
@@ -61,13 +63,6 @@ class NewsListListener
             }
         }
 
-        if ($standortId !== '') {
-
-            $qb->andWhere('standort = :standort')
-                ->setParameter('standort', (int) $standortId);
-
-        }
-
         if ($search !== '') {
 
             $qb->andWhere(
@@ -77,9 +72,7 @@ class NewsListListener
                     'search',
                     '%' . $search . '%'
                 );
-
         }
-
 
         if (true === $featured) {
 
@@ -94,8 +87,6 @@ class NewsListListener
         return (int) $qb->fetchOne();
     }
 
-
-
     #[AsHook('newsListFetchItems')]
     public function fetchItems(array $newsArchives, ?bool $featured, int $limit, int $offset, object $module): Collection|array|false
     {
@@ -104,11 +95,13 @@ class NewsListListener
         if (null === $request) {
             return false;
         }
+        if ('1' !== (string) ($module->enableProjectCategories ?? '')) {
+            return false;
+        }
 
         $categoryClass = $request->query->get('category', '');
-        $standortId = $request->query->get('standort', '');
+
         $search = $request->query->get('search', '');
-        error_log('SEARCH = ' . $search);
 
         $qb = $this->connection->createQueryBuilder()
             ->select('id')
@@ -141,13 +134,6 @@ class NewsListListener
             }
         }
 
-        if ($standortId !== '') {
-
-            $qb->andWhere('standort = :standort')
-                ->setParameter('standort', (int) $standortId);
-
-        }
-
         if ($search !== '') {
 
             $qb->andWhere(
@@ -157,10 +143,7 @@ class NewsListListener
                     'search',
                     '%' . $search . '%'
                 );
-
         }
-
-
 
         if (true === $featured) {
 
@@ -178,19 +161,19 @@ class NewsListListener
             return [];
         }
 
-
         return NewsModel::findMultipleByIds($ids, ['order' => 'date DESC']);
     }
-
-
 
     #[AsHook('parseArticles')]
     public function addCategoriesToTemplate(Template $template, array $row, Module $module): void
     {
 
+        if ('1' !== (string) ($module->enableProjectCategories ?? '')) {
+            return;
+        }
+
         // News Kategorien
         $ids = StringUtil::deserialize($row['newsCategories'] ?? '', true);
-
 
         if (!empty($ids)) {
 
@@ -200,38 +183,13 @@ class NewsListListener
                 [ArrayParameterType::INTEGER]
             );
 
-
             $template->newsCategories = $rows;
 
         } else {
 
             $template->newsCategories = [];
-
         }
-
-
-        $standortId = $row['standort'] ?? null;
-
-
-        if ($standortId) {
-
-            $standort = $this->connection->fetchAssociative(
-                'SELECT name FROM tl_standort WHERE id = ?',
-                [$standortId]
-            );
-
-
-            $template->standort = $standort['name'] ?? '';
-
-        } else {
-
-            $template->standort = '';
-
-        }
-
     }
-
-
 
     private function findCategoryByClass(string $table, string $cssClass): ?array
     {
@@ -239,7 +197,6 @@ class NewsListListener
             "SELECT id FROM {$table} WHERE cssClass = ?",
             [$cssClass]
         );
-
 
         return $row ?: null;
     }

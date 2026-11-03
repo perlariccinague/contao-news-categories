@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Emchundberger\ContaoNewsCategories\DataContainer;
+namespace Wbb\ContaoProjectCategories\DataContainer;
 
 use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;

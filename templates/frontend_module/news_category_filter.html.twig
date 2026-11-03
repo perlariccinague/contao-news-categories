@@ -1,84 +1,24 @@
+
 {% extends "@Contao/frontend_module/_base.html.twig" %}
 
 {% block content %}
 
-    <div class="news-filter">
+    <ul class="category-filter">
 
-        <div class="news-filter-row">
+        {% for category in categories %}
 
-        <span class="filter-title">Standort</span>
-
-        <ul class="news-standort-filter">
-
-            <li class="{% if not activeStandort %}active{% endif %}">
-                <a href="{{ allUrl }}">
-                    Alle
+            <li class="{% if category.active %}active{% endif %}">
+                <a href="{{ category.url }}" class="{{ category.cssClass }}">
+                    {{ category.name }}
                 </a>
             </li>
 
-            {% for standort in standorte %}
+        {% endfor %}
 
-                <li class="{% if standort.active %}active{% endif %}">
-                    <a href="{{ standort.url }}">
-                        {{ standort.name }}
-                    </a>
-                </li>
+        <li class="{% if not activeCategory %}active{% endif %}">
+            <a href="{{ allUrl }}" class="reset">×</a>
+        </li>
 
-            {% endfor %}
-
-        </ul>
-
-    </div>
-
-    <div class="news-filter-row">
-
-        <span class="filter-title">Newsbereich</span>
-
-        <ul class="news-category-filter">
-
-            <li class="{% if not activeCategory %}active{% endif %}">
-                <a href="{{ allUrl }}">
-                    Alle
-                </a>
-            </li>
-
-            {% for category in categories %}
-
-                <li class="{{ category.cssClass }}{% if category.active %} active{% endif %}">
-                    <a href="{{ category.url }}">
-                        {{ category.name }}
-                    </a>
-                </li>
-
-            {% endfor %}
-
-
-        </ul>
-
-    </div>
-
-    <div class="news-search">
-
-        <form method="get">
-
-            <input type="text" name="search" value="{{ search }}" placeholder="Suche">
-
-            {% if activeCategory %}
-                <input type="hidden" name="category" value="{{ activeCategory }}">
-            {% endif %}
-
-            {% if activeStandort %}
-                <input type="hidden" name="standort" value="{{ activeStandort }}">
-            {% endif %}
-
-            <button type="submit">
-                Suchen
-            </button>
-
-        </form>
-
-    </div>
-
-    </div>
+    </ul>
 
 {% endblock %}

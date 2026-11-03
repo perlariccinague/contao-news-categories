@@ -12,7 +12,7 @@ PaletteManipulator::create()
 $GLOBALS['TL_DCA']['tl_news_archive']['fields']['allowedNewsCategories'] = [
     'exclude' => true,
     'inputType' => 'checkbox',
-    'options_callback' => [\Emchundberger\ContaoNewsCategories\DataContainer\CategoryListener::class, 'getAllNewsCategories'],
+    /*'options_callback' => [\Wbb\ContaoProjectCategories\DataContainer\CategoryListener::class, 'getAllNewsCategories'],*/
     'eval' => ['multiple' => true, 'tl_class' => 'clr'],
     'sql' => ['type' => 'blob', 'notnull' => false],
 ];

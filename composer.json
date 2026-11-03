@@ -1,6 +1,7 @@
+
 {
-    "name": "emchundberger/contao-news-categories",
-    "description": "Adds categories to Contao 5 news",
+    "name": "wbb/contao-project-categories",
+    "description": "Adds project categories to Contao news",
     "type": "contao-bundle",
     "license": "LGPL-3.0-or-later",
     "require": {
@@ -10,10 +11,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Emchundberger\\ContaoNewsCategories\\": "src/"
+            "Wbb\\ContaoProjectCategories\\": "src/"
         }
     },
     "extra": {
-        "contao-manager-plugin": "Emchundberger\\ContaoNewsCategories\\ContaoManager\\Plugin"
+        "contao-manager-plugin": "Wbb\\ContaoProjectCategories\\ContaoManager\\Plugin"
     }
 }

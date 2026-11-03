@@ -15,9 +15,5 @@ ArrayUtil::arrayInsert(
         'news_categories' => [
             'tables' => ['tl_news_category'],
         ],
-
-        'standorte' => [
-            'tables' => ['tl_standort'],
-        ],
     ]
 );

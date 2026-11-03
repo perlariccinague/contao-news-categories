@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Emchundberger\ContaoNewsCategories\DependencyInjection;
+namespace Wbb\ContaoProjectCategories\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

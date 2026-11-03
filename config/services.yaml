@@ -3,12 +3,12 @@ services:
         autowire: true
         autoconfigure: true
 
-    Emchundberger\ContaoNewsCategories\:
+    Wbb\ContaoProjectCategories\:
         resource: '../src/*'
         exclude:
             - '../src/ContaoManager/'
             - '../src/DependencyInjection/'
             - '../src/ContaoNewsCategoriesBundle.php'
 
-    Emchundberger\ContaoNewsCategories\Controller\FrontendModule\NewsCategoryFilterController:
+    Wbb\ContaoProjectCategories\Controller\FrontendModule\NewsCategoryFilterController:
         tags: ['controller.service_arguments']

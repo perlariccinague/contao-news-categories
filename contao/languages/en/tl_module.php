@@ -4,3 +4,7 @@ declare(strict_types=1);
 
 $GLOBALS['TL_LANG']['tl_module']['allowedNewsCategories'] = ['Allowed categories', 'Restrict the filter to these categories. Leave empty to show all categories.'];
 $GLOBALS['TL_LANG']['tl_module']['allowedEventCategories'] = ['Allowed categories', 'Restrict the filter to these categories. Leave empty to show all categories.'];
+$GLOBALS['TL_LANG']['tl_module']['enableProjectCategories'] = [
+    'Enable project categories',
+    'Enables filtering by project categories for this news list.'
+];

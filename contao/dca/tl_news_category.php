@@ -18,7 +18,7 @@ $GLOBALS['TL_DCA']['tl_news_category'] = [
     'list' => [
         'sorting' => [
             'mode' => DataContainer::MODE_SORTED,
-            'fields' => ['name ASC'],
+            'fields' => ['name'],
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'panelLayout' => 'search,limit',
         ],

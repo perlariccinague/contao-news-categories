@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Emchundberger\ContaoNewsCategories\Controller\FrontendModule;
+namespace Wbb\ContaoProjectCategories\Controller\FrontendModule;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
@@ -69,37 +69,10 @@ class NewsCategoryFilterController extends AbstractFrontendModuleController
             ];
         }
 
-        $standortRows = $this->connection->fetchAllAssociative(
-            'SELECT id, name FROM tl_standort ORDER BY name'
-        );
-
-
-        $activeStandort = $request->query->get('standort', '');
-
-        $standorte = [];
-
-
-        foreach ($standortRows as $row) {
-
-            $params = $currentParams;
-            unset($params['page']);
-
-            $params['standort'] = $row['id'];
-
-
-            $standorte[] = [
-                'id' => $row['id'],
-                'name' => $row['name'],
-                'url' => $basePath . '?' . http_build_query($params),
-                'active' => (string) $row['id'] === (string) $activeStandort,
-            ];
-        }
-
         $allParams = $currentParams;
 
         unset(
             $allParams['category'],
-            $allParams['standort'],
             $allParams['page']
         );
 
@@ -113,8 +86,7 @@ class NewsCategoryFilterController extends AbstractFrontendModuleController
         $template->categories = $categories;
         $template->activeCategory = $activeClass;
 
-        $template->standorte = $standorte;
-        $template->activeStandort = $activeStandort;
+
 
         $template->allUrl = $allUrl;
 

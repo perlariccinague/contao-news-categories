@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Emchundberger\ContaoNewsCategories;
+namespace Wbb\ContaoProjectCategories;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

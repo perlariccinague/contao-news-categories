@@ -8,4 +8,3 @@ $GLOBALS['TL_LANG']['MOD']['news_categories'] = ['Nachrichtenkategorien', 'Nachr
 // Frontend-Module
 $GLOBALS['TL_LANG']['FMD']['news_category_filter'] = ['Nachrichtenkategorie-Filter', 'Zeigt eine Kategoriefilterleiste für Nachrichtenlisten an.'];
 
-$GLOBALS['TL_LANG']['MOD']['standorte'] = ['Standorte', 'Standorte verwalten',];
