@@ -1,6 +1,6 @@
 
 {
-    "name": "wbb/contao-project-categories",
+    "name": "wbbtools/contao-project-categories",
     "description": "Adds project categories to Contao news",
     "type": "contao-bundle",
     "license": "LGPL-3.0-or-later",
