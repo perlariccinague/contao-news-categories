@@ -31,10 +31,6 @@ class NewsListListener
             return false;
         }
 
-        if ('1' !== (string) ($module->enableProjectCategories ?? '')) {
-            return false;
-        }
-
         $categoryClass = $request->query->get('category', '');
         $search = $request->query->get('search', '');
 
@@ -93,9 +89,6 @@ class NewsListListener
         $request = $this->requestStack->getCurrentRequest();
 
         if (null === $request) {
-            return false;
-        }
-        if ('1' !== (string) ($module->enableProjectCategories ?? '')) {
             return false;
         }
 
@@ -167,10 +160,6 @@ class NewsListListener
     #[AsHook('parseArticles')]
     public function addCategoriesToTemplate(Template $template, array $row, Module $module): void
     {
-
-        if ('1' !== (string) ($module->enableProjectCategories ?? '')) {
-            return;
-        }
 
         // News Kategorien
         $ids = StringUtil::deserialize($row['newsCategories'] ?? '', true);
