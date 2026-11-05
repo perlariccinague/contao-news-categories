@@ -163,6 +163,10 @@ class NewsListListener
 
         // News Kategorien
         $ids = StringUtil::deserialize($row['newsCategories'] ?? '', true);
+        dump([
+            'row_newsCategories' => $row['newsCategories'] ?? null,
+            'ids' => $ids,
+        ]);
 
         if (!empty($ids)) {
 
