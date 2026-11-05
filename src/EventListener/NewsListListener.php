@@ -161,7 +161,6 @@ class NewsListListener
     public function addCategoriesToTemplate(Template $template, array $row, Module $module): void
     {
         $ids = StringUtil::deserialize($row['newsCategories'] ?? '', true);
-
         $ids = array_filter(array_map('intval', $ids));
 
         $rows = [];
@@ -174,12 +173,7 @@ class NewsListListener
             );
         }
 
-        dump('IDS:', $ids);
-        dump('CATEGORIES TROUVÉES:', $rows);
-
         $template->newsCategories = $rows;
-
-        dump('VARIABLE DU TEMPLATE:', $template->newsCategories);
     }
 
     private function findCategoryByClass(string $table, string $cssClass): ?array
