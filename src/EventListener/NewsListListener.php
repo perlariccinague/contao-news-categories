@@ -162,9 +162,6 @@ class NewsListListener
     {
 
         // News Kategorien
-        $ids = StringUtil::deserialize($row['newsCategories'] ?? '', true);
-        dump('HOOK parseArticles exécuté');
-        dump($ids);
 
         if (!empty($ids)) {
 
